@@ -47,7 +47,7 @@ while pariteRespectee > 0       % Si il y a eu une correction dans la dernière b
             pariteRespectee = pariteRespectee + 1;  % on execute la boucle une fois de plus la prochaine fois
             for v = 1:nbVNodes
                 if H(c,v)
-                    v_nodes(v) = v_nodes(v).vote(mod(v_nodes(v).Bit + 1, 2));
+                    v_nodes(v) = v_nodes(v).vote(~v_nodes(v).Bit);
                 end
             end
         else
