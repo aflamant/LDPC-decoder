@@ -1,7 +1,12 @@
 classdef c_node
     
     properties
-        Parity 
+        Parity          %the parity of this check node
+        R0              %the probability of an even number of 1s
+        R1              %the probability of an odd number of 1s
+        
+        Votes           %the information received from the corresponding v_nodes
+        Index           %the index of the above array
     end
     
     methods
@@ -14,7 +19,7 @@ classdef c_node
             r = obj;
         end
         
-        function r = raz(obj)
+        function r = update(obj)
             obj.Parity = 0;
             r=obj;
         end

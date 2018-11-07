@@ -1,0 +1,59 @@
+Skip to content
+ 
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ @aflamant Sign out
+2,714
+74,826 35,310 github/gitignore
+ Code  Pull requests 158  Projects 0  Insights
+gitignore/Global/Matlab.gitignore
+3a86aa2  on 17 Jun
+@shiftkey shiftkey Merge pull request #2686 from 14roiron/patch-1
+@sllroberts @Jumbalaya @jayvdb @izuzak @safwanc @cobyism @caioproiete @shiftkey @Ayase-252 @mcandre @14roiron
+     
+29 lines (20 sloc)  415 Bytes
+# Windows default autosave extension
+*.asv
+
+# OSX / *nix default autosave extension
+*.m~
+
+# Compiled MEX binaries (all platforms)
+*.mex*
+
+# Packaged app and toolbox files
+*.mlappinstall
+*.mltbx
+
+# Generated helpsearch folders
+helpsearch*/
+
+# Simulink code generation folders
+slprj/
+sccprj/
+
+# Matlab code generation folders
+codegen/
+
+# Simulink autosave extension
+*.autosave
+
+# Octave session info
+octave-workspace
+© 2018 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Press h to open a hovercard with more details.

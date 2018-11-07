@@ -1,14 +1,19 @@
 classdef v_node
     
     properties
-        Bit     %bit deviné par la node
-        Votes   %bits reçus depuis les c_nodes
-        Index   %index du tableau ci-dessus
+        Bit             %bit deviné par la node
+        Q0              %probabilité que le bit soit égal à 0 
+        Q1              %probabilité que le bit soit égal à 1
+        
+        Votes           %bits reçus depuis les c_nodes
+        Index           %index du tableau ci-dessus
     end
     
     methods
         function obj=v_node(bit,nbVNodes)
             obj.Bit = bit;
+            obj.Q0 = 1-bit
+            obj.Q1 = bit;
             obj.Votes = zeros(1,nbVNodes);
             obj.Index = 1;
         end
