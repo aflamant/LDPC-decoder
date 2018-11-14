@@ -5,12 +5,20 @@ clear variables;
 nbCNodes=4;
 nbVNodes=8;
 
-H= [0 1 0 1 1 0 0 1 ; 1 1 1 0 0 1 0 0 ; 0 0 1 0 0 1 1 1 ; 1 0 0 1 1 0 1 0 ]; 
+H= [0 1 0 1 1 0 0 1 ; 1 1 1 0 0 1 0 0 ; 0 0 1 0 0 1 1 1 ; 1 0 0 1 1 0 1 0 ];
 
-message= [1 1 0 1 0 1 0 1 ];
+valide = [1 0 0 1 0 1 0 1];         %message valide transmis
+erreur = [0 0 0 1 0 0 1 0];         %bits d'erreur
+
+message = mod(valide + erreur,2);
 
 for i=1:nbVNodes
-    v_nodes(i)= v_node(message(i),nbCNodes);
+    if erreur(i)
+        proba = abs(message(i)-0.4);    %on a peu confiance dans les bits d'erreur
+    else
+        proba = abs(message(i)-0.1);    %on a une grande confiance dans les bits corrects
+    end
+    v_nodes(i)= v_node(proba,nbCNodes);
 end
 
 for i=1:nbCNodes
@@ -18,17 +26,17 @@ for i=1:nbCNodes
 end
 
 
-pariteRespectee=1;
+pariteEchouee=1;
 
 nbBoucles = 0; 
 
 %% Main loop
-while pariteRespectee > 0 && nbBoucles < 100      % Si il y a eu une correction dans la dernière boucle, on continue
+while pariteEchouee > 0 && nbBoucles < 100      %Tant que la parité n'est pas bonne, avec une condition d'arrêt pour éviter une boucle infinie
     
 
     nbBoucles = nbBoucles + 1;  
    
-   %% Envoi des probas aux c_nodes
+   %% Envoi des probabilités aux c_nodes
    
    for c = 1:nbCNodes
         for v= 1:nbVNodes
@@ -41,23 +49,6 @@ while pariteRespectee > 0 && nbBoucles < 100      % Si il y a eu une correction 
    
 
    %% Réponse des c_nodes
-%    for c = 1:nbCNodes
-%         if c_nodes(c).Parity                        % test de parité échoué
-%             pariteRespectee = pariteRespectee + 1;  % on execute la boucle une fois de plus la prochaine fois
-%             for v = 1:nbVNodes
-%                 if H(c,v)
-%                     v_nodes(v) = v_nodes(v).vote(~v_nodes(v).Bit);
-%                 end
-%             end
-%         else
-%             for v = 1:nbVNodes
-%                 if H(c,v)
-%                     v_nodes(v) = v_nodes(v).vote(v_nodes(v).Bit);
-%                 end
-%             end
-%         end
-%    end
-   
     for v = 1:nbVNodes
         for c = 1:nbCNodes
             if H(c,v)
@@ -67,13 +58,15 @@ while pariteRespectee > 0 && nbBoucles < 100      % Si il y a eu une correction 
         v_nodes(v) = v_nodes(v).update();
     end
     
+    
+    %% Test de la parité
+    
     decodage = [];
-
     for i=1:nbVNodes
       decodage = [decodage v_nodes(i).Bit];
     end
     
-    pariteRespectee = sum(mod(decodage * H' , 2));
+    pariteEchouee = sum(mod(decodage * H' , 2));
     
 end
 
@@ -89,3 +82,14 @@ end
 disp(['Nb boucles = ' num2str(nbBoucles)])
 disp(['Message envoyé : ' num2str(message)])
 disp(['Message décodé : ' num2str(decodage)])
+
+if ~pariteEchouee
+    disp('Message valide reconstruit !')
+    if decodage == valide
+        disp('Bon message reçu !')
+    else
+        disp('Message erroné reçu')
+    end
+else
+    disp('Reconstruction échouée')
+end
